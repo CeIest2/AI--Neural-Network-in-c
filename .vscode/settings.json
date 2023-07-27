@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "struct.h": "c"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "enabled"
+}
