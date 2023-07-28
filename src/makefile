@@ -5,10 +5,10 @@ CC := gcc
 CFLAGS := -Wall -Wextra -fsanitize=address,undefined
 
 # Nom de l'exécutable à générer
-TARGET := main
+TARGET := struct
 
 # Liste des sources (ajoutez plus de fichiers .c ici si nécessaire)
-SOURCES := main.c struct.c
+SOURCES :=  struct.c
 
 # Liste des fichiers d'en-tête (ajoutez plus de fichiers .h ici si nécessaire)
 HEADERS := struct.h
