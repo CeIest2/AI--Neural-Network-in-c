@@ -11,6 +11,32 @@ typedef struct list_hidden_layer_queue list_hidden_layer_queue;
 typedef struct neural_network neural_network;
 
 
+vector* create_vector(int size);
+matrix* create_matrix(int rows, int cols);
+input_layer* create_input(int size);
+hidden_layer* create_hidden_layer(int number_hidden_layer, int number_hidden_last_layer);
+output_layer* create_output_layer(int size);
+list_hidden_layer_head* create_list_hidden_layer();
+neural_network* create_neural_network();
+
+void destroy_vector(vector* vector_data);
+void destroy_matrix(matrix* matrix_data);
+void destroy_input(input_layer* input_data);
+void destroy_hidden_layer(hidden_layer* hidden_layer_data);
+void destroy_output_layer(output_layer* output_layer_data);
+void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HL_list);
+void destroy_neural_network(neural_network* neural_network_data);
+
+matrix* matrix_product(matrix* matrix1, matrix* matrix2);
+matrix* matrix_sum(matrix* matrix1, matrix* matrix2);
+
+void add_hidden_layer_to_list(list_hidden_layer_head* head_of_HL_list, hidden_layer* hidden_layer_data);
+
+
+
+
+
+
 struct matrix {
     // c'est une matrice, ça ce voit là
     int rows;                  // nombre de ligne de la matrice

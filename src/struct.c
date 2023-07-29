@@ -117,10 +117,10 @@ list_hidden_layer_head* create_list_hidden_layer(){
     return list_hidden_layer_tete;
 }
 
-void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HD_list){
+void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HL_list){
     // ici on détruit la liste chainé, on détruit d'abord les HL puis on détruit la tête
 
-    list_hidden_layer* list_hidden_layer_courant = head_of_HD_list->next;
+    list_hidden_layer* list_hidden_layer_courant = head_of_HL_list->next;
     list_hidden_layer* list_hidden_layer_next = NULL;
     while(list_hidden_layer_courant != NULL){
         list_hidden_layer_next = list_hidden_layer_courant->next;
@@ -128,19 +128,9 @@ void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HD_list){
         free(list_hidden_layer_courant);
         list_hidden_layer_courant = list_hidden_layer_next;
     }
-    free(head_of_HD_list);
+    free(head_of_LD_list);
 }
 
-void add_hidden_layer(int number_of_neural, list_hidden_layer_head* list_hidden_layer_tete){
-    // on commence par parcourir la liste chainée et on rajoute à la fin
-    // une nouvelle couche que l'on créer ave la fonction create_hidden_layer
-
-    list_hidden_layer* list_hidden_layer_courant = list_hidden_layer_tete;
-    while(list_hidden_layer_courant->next != NULL){
-        list_hidden_layer_courant = list_hidden_layer_courant->next;
-    }
-    list_hidden_layer_courant->next = create_hidden_layer(number_of_neural,list_hidden_layer_courant->number_of_neural);
-}
 
 void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list_hidden_layer_tete){
     // on commence par parcourir la liste chainée et on rajoute à la fin
@@ -151,4 +141,19 @@ void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list
         list_hidden_layer_courant = list_hidden_layer_courant->next;
     }
     list_hidden_layer_courant->next = create_hidden_layer(number_of_neural,list_hidden_layer_courant->number_of_neural);
+}
+
+neural_network* create_neural_network(){
+    neural_network* neural_network_object = malloc(sizeof(neural_network));
+    neural_network_object->input_data = NULL;
+    neural_network_object->output_layer_data = NULL;
+    neural_network_object->list_hidden_layer_tete = create_list_hidden_layer();
+    return neural_network_object;
+}
+
+void destroy_neural_network(neural_network* neural_network_object){
+    destroy_input(neural_network_object->input_data);
+    destroy_output_layer(neural_network_object->output_layer_data);
+    destroy_list_hidden_layer(neural_network_object->list_hidden_layer_tete);
+    free(neural_network_object);
 }
