@@ -66,7 +66,7 @@ struct hidden_layer{
     
     int number_hidden_neural;     // nombre de neurone dans cette couche
     matrix* matrix_weight;        // matrice de la couche cachée
-    matrix* bias;                   // valeur du biais de la couche
+    matrix* bias;                  // valeur du biais de la couche
     matrix* vector_data;          // vecteur de la sortie de la couche de neurones 
     int function_type;            // type de fonction d'activation
 };
@@ -79,7 +79,7 @@ struct output_layer{
 };
 
 struct list_hidden_layer_queue{
-    hidden_layer* hidden_layer_object;  // hidden_layer, élément de la queue de la liste chaînée de HL
+    hidden_layer* hidden_layer_object;        // hidden_layer, élément de la queue de la liste chaînée de HL
     list_hidden_layer_queue* next;            // prochain élément de la chaine
 };
 
