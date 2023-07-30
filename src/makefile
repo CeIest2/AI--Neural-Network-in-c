@@ -1,22 +1,16 @@
-# Compilateur à utiliser
-CC := gcc
+CC = gcc
+CFLAGS = -Wall -Wextra -fsanitize=address -fsanitize=address
+SRC = main.c struct.c function.c
+OBJ = $(SRC:.c=.o)
+EXE = main
 
-# Options de compilation
-CFLAGS := -Wall -Wextra -fsanitize=address,undefined
+all: $(EXE)
 
-# Nom de l'exécutable à générer
-TARGET := struct
+$(EXE): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(EXE) -lm
 
-# Liste des sources (ajoutez plus de fichiers .c ici si nécessaire)
-SOURCES :=  struct.c
-
-# Liste des fichiers d'en-tête (ajoutez plus de fichiers .h ici si nécessaire)
-HEADERS := struct.h
-
-all: $(TARGET)
-
-$(TARGET): $(SOURCES) $(HEADERS)
-	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(EXE) $(OBJ)

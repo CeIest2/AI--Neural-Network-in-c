@@ -1,27 +1,29 @@
 #ifndef __STRUCT_H__
 #define __STRUCT_H__
 
+typedef struct input input;
 typedef struct input_layer input_layer;
 typedef struct hidden_layer hidden_layer;
 typedef struct output_layer output_layer;
 typedef struct matrix matrix;
-typedef struct vector vector;
 typedef struct list_hidden_layer_head list_hidden_layer_head;
 typedef struct list_hidden_layer_queue list_hidden_layer_queue;
 typedef struct neural_network neural_network;
 
 
-vector* create_vector(int size);
+
 matrix* create_matrix(int rows, int cols);
-input_layer* create_input(int size);
+input* create_input(int size);
+input_layer* create_input_layer(int size);
 hidden_layer* create_hidden_layer(int number_hidden_layer, int number_hidden_last_layer);
 output_layer* create_output_layer(int size);
 list_hidden_layer_head* create_list_hidden_layer();
 neural_network* create_neural_network();
 
-void destroy_vector(vector* vector_data);
+
 void destroy_matrix(matrix* matrix_data);
-void destroy_input(input_layer* input_data);
+void destroy_input(input* input_data);
+void destroy_input_layer(input_layer* input_layer);
 void destroy_hidden_layer(hidden_layer* hidden_layer_data);
 void destroy_output_layer(output_layer* output_layer_data);
 void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HL_list);
@@ -30,11 +32,18 @@ void destroy_neural_network(neural_network* neural_network_data);
 matrix* matrix_product(matrix* matrix1, matrix* matrix2);
 matrix* matrix_sum(matrix* matrix1, matrix* matrix2);
 
-void add_hidden_layer_to_list(list_hidden_layer_head* head_of_HL_list, hidden_layer* hidden_layer_data);
+void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list_hidden_layer_tete);
+
+void add_input_layer_NN(neural_network* neural_network_object, int number_of_neural);
+void add_output_layer_NN(neural_network* neural_network_object, int number_of_neural);
+void add_hidden_layer_NN(neural_network* neural_network_object,int number_of_layer, int number_of_neural);
 
 
-
-
+struct input{
+    int size;                   // taille de l'input
+    matrix* data_vector_input;  // vecteur de l'input
+    matrix* bias;                 // biais de l'input
+};
 
 
 struct matrix {
@@ -44,42 +53,38 @@ struct matrix {
     float** data;              // matrice de float
 };
 
-struct vector{
-    // c'est un vecteur
-    int size;                  // taille du vecteur
-    float* data;               // list de float
-};
+
 
 struct input_layer{
     // vecteur de la taille de l'input, par exemple le nombre de pixel d'une image
     int size;                   // taille de l'input
-    vector* data_vector_input;  // vecteur de l'input
-    float bias;                 // biais de l'input
+    matrix* data_vector_input;  // vecteur de l'input
+    matrix* bias;                 // biais de l'input
 };
 
 struct hidden_layer{
     
-    int number_hidden_layer;      // nombre de neurone dans cette couche
+    int number_hidden_neural;     // nombre de neurone dans cette couche
     matrix* matrix_weight;        // matrice de la couche cachée
-    float bias;                   // valeur du biais de la couche
-    vector* vector_data;          // vecteur de la sortie de la couche de neurones 
+    matrix* bias;                   // valeur du biais de la couche
+    matrix* vector_data;          // vecteur de la sortie de la couche de neurones 
     int function_type;            // type de fonction d'activation
 };
 
 
 struct output_layer{
     int size;                    // taille de l'output
-    vector* vector_data_output;  // vecteur de l'output
+    matrix* vector_data_output;  // vecteur de l'output
 
 };
 
 struct list_hidden_layer_queue{
     hidden_layer* hidden_layer_object;  // hidden_layer, élément de la queue de la liste chaînée de HL
-    list_hidden_layer* next;            // prochain élément de la chaine
+    list_hidden_layer_queue* next;            // prochain élément de la chaine
 };
 
 struct list_hidden_layer_head{
-    hidden_layer* head_of_list;         // tête de la liste chaîné d' HL
+    list_hidden_layer_queue* head_of_list;         // tête de la liste chaîné d' HL
     int nb_HL;                          // Nombre de HL dans cette liste
 };
 
@@ -89,7 +94,7 @@ struct neural_network{
     // les matrices de poids de chaque couche
 
     input_layer* input_layer_NN;
-    hidden_layer* hidden_layer_NN;
+    list_hidden_layer_head* list_hidden_layer_NN;
     output_layer* output_layer_NN;
     int number_of_hidden_layer;
 
