@@ -37,7 +37,7 @@ void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list
 void add_input_layer_NN(neural_network* neural_network_object, int number_of_neural);
 void add_output_layer_NN(neural_network* neural_network_object, int number_of_neural);
 void add_hidden_layer_NN(neural_network* neural_network_object,int number_of_layer, int number_of_neural);
-
+void initialize_neural_network(neural_network* neural_network_object);
 
 struct input{
     int size;                   // taille de l'input
@@ -97,6 +97,7 @@ struct neural_network{
     list_hidden_layer_head* list_hidden_layer_NN;
     output_layer* output_layer_NN;
     int number_of_hidden_layer;
+    int state; // 0 = non initialisé, 1 = initialisé
 
 };
 

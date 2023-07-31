@@ -23,22 +23,16 @@ void destroy_matrix(matrix* matrix_data){
     if(matrix_data == NULL){
         return ;
     }
-    printf("destroy matrix in function\n");
     for(int i=0;i<matrix_data->rows;i++){
         if(matrix_data->data[i] != NULL){
             free(matrix_data->data[i]);
         }
     }
-    printf(" after boucle\n");
-    printf(" matrix_data->data = %p\n",matrix_data->data);
+
     if(matrix_data->data != NULL){
-        printf("oui\n");
         free(matrix_data->data);
-        printf("non \n");
     }
-    printf(" after free data\n");
     free(matrix_data);
-    printf(" after free matrix\n");
 }
 
 input* create_input(int size){
@@ -85,25 +79,17 @@ hidden_layer* create_hidden_layer(int number_hidden_neural, int number_hidden_la
 }
 
 void destroy_hidden_layer(hidden_layer* hidden_layer_data){
-    printf(" destroy hidden layer pointer matrix : %p \n", hidden_layer_data);
-    printf("hidden_layer_data->vector_data %p\n",hidden_layer_data->vector_data);
-    printf("hidden_layer_data->bias %p\n",hidden_layer_data->bias);
-    printf("hidden_layer_data->matrix_weight %p\n",hidden_layer_data->matrix_weight);
+
     if(hidden_layer_data == NULL){
-        printf("ok\n");
         return ;
     }
-    printf("suite \n");
     if(hidden_layer_data->matrix_weight!=NULL){
         destroy_matrix(hidden_layer_data->matrix_weight);
     }
 
-    printf("suite 2 \n");
     destroy_matrix(hidden_layer_data->vector_data);
     destroy_matrix(hidden_layer_data->bias);
-    printf(" après matrix\n");
     free(hidden_layer_data);
-    printf(" après free\n");
 }
 
 output_layer* create_output_layer(int size){
@@ -167,17 +153,11 @@ void destroy_list_hidden_layer(list_hidden_layer_head* head_of_HL_list){
     // ici on détruit la liste chainé, on détruit d'abord les HL puis on détruit la tête
     list_hidden_layer_queue* current_HL = head_of_HL_list->head_of_list;
     free(head_of_HL_list);
-    printf("test3.5\n");
     while (current_HL != NULL) {
-        printf("test3.6\n");
-        printf("current_HL = %p\n",current_HL);
         list_hidden_layer_queue* next_HL = current_HL->next; // Avant de libérer current_HL
-        printf(" next_HL = %p\n",next_HL);
         destroy_hidden_layer(current_HL->hidden_layer_object); // Libérer la mémoire allouée pour le HL courant
         free(current_HL); // Libérer la mémoire allouée pour le maillon courant
-        if(next_HL == NULL){
-            printf("nest est null\n");
-        }
+
         current_HL = next_HL; // Mettre à jour current_HL avec next_HL pour la prochaine itération
 
     }
@@ -205,7 +185,6 @@ void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list
         list_hidden_layer_courant = list_hidden_layer_courant->next;
     }
     hidden_layer* new_hidden_layer = create_hidden_layer(number_of_neural,list_hidden_layer_courant->hidden_layer_object->number_hidden_neural);
-    printf("test\n");
     list_hidden_layer_courant->next = malloc(sizeof(list_hidden_layer_queue));
     list_hidden_layer_courant->next->hidden_layer_object = new_hidden_layer;
     list_hidden_layer_tete->nb_HL++;
@@ -234,11 +213,20 @@ void add_output_layer_NN(neural_network* neural_network_object, int number_of_ne
     neural_network_object->output_layer_NN = create_output_layer(number_of_neural);
 }
 
+void initialize_neural_network(neural_network* neural_network_object){
+    int number_of_neural = neural_network_object->state;
+    int a = 1;
+    a += number_of_neural;
+    return;
+
+}
+
 neural_network* create_neural_network(){
     neural_network* neural_network_object = malloc(sizeof(neural_network));
     neural_network_object->input_layer_NN = NULL;
     neural_network_object->output_layer_NN = NULL;
     neural_network_object->list_hidden_layer_NN = create_list_hidden_layer();
+    neural_network_object->state = 0;
     return neural_network_object;
 }
 
@@ -246,14 +234,9 @@ void destroy_neural_network(neural_network* neural_network_object){
     if(neural_network_object == NULL){
         return;
     }
-    printf("fin\n");
 
     destroy_input_layer(neural_network_object->input_layer_NN);
-    printf("fin2\n");
     destroy_output_layer(neural_network_object->output_layer_NN);
-    printf("fin3\n");
     destroy_list_hidden_layer(neural_network_object->list_hidden_layer_NN);
-    printf("fin4\n");
     free(neural_network_object);
-    printf("fin5\n");
 }
