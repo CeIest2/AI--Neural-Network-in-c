@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "struct.h"
+#include "weight_function.h"
 
 
 
@@ -251,6 +252,7 @@ void initialize_neural_network(neural_network* neural_network_object){
         }
         neural_network_object->output_layer_NN->matrix_weight = create_matrix(list_hidden_layer_courant->hidden_layer_object->number_hidden_neural, neural_network_object->output_layer_NN->size);
     }
+    init_weight_and_bias(neural_network_object);
 
 }
 

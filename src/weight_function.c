@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #include "struct.h"
 #include "weight_function.h"
@@ -20,6 +21,8 @@ float xavier_weight_init(int n_in, int n_out) {
 }
 
 void init_matrix_weight(matrix* matrix_to_init, int nb_in, int nb_out){
+    srand(time(NULL));
+
     // dans cette fonction on va initialiser les poids pour une matrice
     // on va utiliser la méthode de Xavier pour initialiser les poids
     for(int i=0;i<matrix_to_init->rows;i++){
@@ -29,6 +32,8 @@ void init_matrix_weight(matrix* matrix_to_init, int nb_in, int nb_out){
     }
     return ;
 }
+
+
 
 void init_weight_and_bias(neural_network* NN_to_initialized){
     // dans cette fonction on va initialiser les poids et les biais pour tout le réseau
@@ -46,18 +51,18 @@ void init_weight_and_bias(neural_network* NN_to_initialized){
     }
     
     while(current_hidden_layer->next !=NULL){
-        
         init_matrix_weight(current_hidden_layer->hidden_layer_object->matrix_weight, nb_in, nb_out);
         init_matrix_weight(current_hidden_layer->hidden_layer_object->bias, nb_in, nb_out);
         nb_in = current_hidden_layer->hidden_layer_object->number_hidden_neural;
         current_hidden_layer = current_hidden_layer->next;
-        if(current_hidden_layer ==NULL){
+        if(current_hidden_layer->next ==NULL){
             nb_out = NN_to_initialized->output_layer_NN->size;
         }
         else{
+
             nb_out = current_hidden_layer->next->hidden_layer_object->number_hidden_neural;
         }
-    }
+    }   
 
     // on init maintenant la dernière couche ( celle de l output)
     init_matrix_weight(NN_to_initialized->output_layer_NN->matrix_weight, nb_in, nb_out);
