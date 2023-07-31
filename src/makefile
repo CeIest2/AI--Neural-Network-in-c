@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -fsanitize=address -fsanitize=address
-SRC = main.c struct.c function.c display_struct.c
+SRC = main.c struct.c function.c display_struct.c weight_function.c
 OBJ = $(SRC:.c=.o)
 EXE = main
 
