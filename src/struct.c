@@ -71,7 +71,12 @@ void destroy_input_layer(input_layer* input_layer){
 hidden_layer* create_hidden_layer(int number_hidden_neural, int number_hidden_last_layer){
     hidden_layer* hidden_layer_data              = malloc(sizeof(hidden_layer));
     hidden_layer_data->number_hidden_neural      = number_hidden_neural;
-    hidden_layer_data->matrix_weight = create_matrix(number_hidden_neural,number_hidden_last_layer);
+    if(number_hidden_last_layer == -1){
+        hidden_layer_data->matrix_weight = NULL;
+    }
+    else{
+        hidden_layer_data->matrix_weight = create_matrix(number_hidden_neural,number_hidden_last_layer);
+    }
     hidden_layer_data->bias          = create_matrix(number_hidden_neural,1);
     hidden_layer_data->vector_data = create_matrix(number_hidden_neural,1);
     hidden_layer_data->function_type = 0;
@@ -96,6 +101,8 @@ output_layer* create_output_layer(int size){
     output_layer* output_layer_data = malloc(sizeof(output_layer));
     output_layer_data->size = size;
     output_layer_data->vector_data_output = create_matrix(size,1);
+    output_layer_data->bias = create_matrix(size,1);
+    output_layer_data->matrix_weight = NULL;
     return output_layer_data;
 }
 
@@ -104,6 +111,10 @@ void destroy_output_layer(output_layer* output_layer_data){
         return ;
     }
     destroy_matrix(output_layer_data->vector_data_output);
+    destroy_matrix(output_layer_data->bias);
+    if(output_layer_data->matrix_weight!=NULL){
+        destroy_matrix(output_layer_data->matrix_weight);
+    }
     free(output_layer_data);
 }
 
@@ -173,7 +184,7 @@ void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list
     // une nouvelle couche que l'on créer ave la fonction create_hidden_layer
     if(list_hidden_layer_tete->head_of_list->hidden_layer_object == NULL){
         // cas ou la liste est vide
-        hidden_layer* new_hidden_layer = create_hidden_layer(number_of_neural,2);
+        hidden_layer* new_hidden_layer = create_hidden_layer(number_of_neural,-1);
         list_hidden_layer_tete->head_of_list->hidden_layer_object = new_hidden_layer;
         list_hidden_layer_tete->nb_HL++;
     }
@@ -214,10 +225,32 @@ void add_output_layer_NN(neural_network* neural_network_object, int number_of_ne
 }
 
 void initialize_neural_network(neural_network* neural_network_object){
-    int number_of_neural = neural_network_object->state;
-    int a = 1;
-    a += number_of_neural;
-    return;
+    if(neural_network_object->state == 1   ){
+        printf("Error : neural network already initialized\n");
+        return;
+    }
+    else if(neural_network_object->input_layer_NN == NULL){
+        printf("Error : no input layer\n");
+        return;
+    }
+    else if(neural_network_object->output_layer_NN == NULL){
+        printf("Error : no output layer\n");
+        return;
+    }
+    else if(neural_network_object->list_hidden_layer_NN->nb_HL == 0){
+        printf("Error : no hidden layer\n");
+        return;
+    }
+    else{
+        neural_network_object->state = 1;
+        neural_network_object->list_hidden_layer_NN->head_of_list->hidden_layer_object->matrix_weight = create_matrix(neural_network_object->input_layer_NN->size, neural_network_object->list_hidden_layer_NN->head_of_list->hidden_layer_object->number_hidden_neural);
+        // maintenant on va chercher le nombre de neurone de la dernière couche caché
+        list_hidden_layer_queue* list_hidden_layer_courant = neural_network_object->list_hidden_layer_NN->head_of_list;
+        while(list_hidden_layer_courant->next != NULL){
+            list_hidden_layer_courant = list_hidden_layer_courant->next;
+        }
+        neural_network_object->output_layer_NN->matrix_weight = create_matrix(list_hidden_layer_courant->hidden_layer_object->number_hidden_neural, neural_network_object->output_layer_NN->size);
+    }
 
 }
 

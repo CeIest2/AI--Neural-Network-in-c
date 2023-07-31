@@ -75,6 +75,8 @@ struct hidden_layer{
 struct output_layer{
     int size;                    // taille de l'output
     matrix* vector_data_output;  // vecteur de l'output
+    matrix* bias;
+    matrix* matrix_weight;       // matrice de la couche de sortie
 
 };
 

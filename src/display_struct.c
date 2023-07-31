@@ -23,10 +23,16 @@ void print_matrix(matrix* matrix_data){
 
 
 void print_NN(neural_network* NN_to_print){
-    printf("========Neural Network========\n");
+    printf("========Neural Network========\n\n");
     if(NN_to_print == NULL){
         printf("Neural Network is NULL\n");
         return ;
+    }
+    if(NN_to_print->state == 0){
+        printf("Neural Network is not initialized\n\n");
+    }
+    else{
+        printf("Neural Network is initialized\n\n");
     }
     if(NN_to_print->input_layer_NN != NULL){
         printf("Input layer with %d neurons\n\n\n", NN_to_print->input_layer_NN->size);
