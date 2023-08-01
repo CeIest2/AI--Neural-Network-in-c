@@ -83,6 +83,7 @@ struct output_layer{
 struct list_hidden_layer_queue{
     hidden_layer* hidden_layer_object;        // hidden_layer, élément de la queue de la liste chaînée de HL
     list_hidden_layer_queue* next;            // prochain élément de la chaine
+    list_hidden_layer_queue* previous;        // élément précédent de la chaine
 };
 
 struct list_hidden_layer_head{

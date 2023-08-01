@@ -154,6 +154,7 @@ list_hidden_layer_head* create_list_hidden_layer(){
     list_hidden_layer_tete->head_of_list = malloc(sizeof(list_hidden_layer_queue));
     list_hidden_layer_tete->head_of_list->hidden_layer_object = NULL;
     list_hidden_layer_tete->head_of_list->next = NULL;
+    list_hidden_layer_tete->head_of_list->previous = NULL;
 
     return list_hidden_layer_tete;
 }
@@ -201,6 +202,7 @@ void add_hidden_layer_to_list(int number_of_neural, list_hidden_layer_head* list
     list_hidden_layer_courant->next->hidden_layer_object = new_hidden_layer;
     list_hidden_layer_tete->nb_HL++;
     list_hidden_layer_courant->next->next = NULL;
+    list_hidden_layer_courant->next->previous = list_hidden_layer_courant;
     }
 }
 
