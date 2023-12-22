@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "struct.h"
-#include "function.h"
+#include "activation_function.h"
 #include "display_struct.h"
 
 
