@@ -22,6 +22,12 @@ int main(){
     print_matrix(test_NN->list_hidden_layer_NN->head_of_list->hidden_layer_object->matrix_weight);
     print_matrix(test_NN->output_layer_NN->matrix_weight);
     print_matrix(test_NN->list_hidden_layer_NN->head_of_list->hidden_layer_object->bias);
+    
+    
+    
+    
+    
+    
     destroy_neural_network(test_NN);
 
     return 0 ;

@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/OpenGLTest.dir/fichier_open_gl/main_opgl.c.o -o OpenGLTest  /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libglut.so 

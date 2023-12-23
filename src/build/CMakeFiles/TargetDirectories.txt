@@ -1,0 +1,3 @@
+/mnt/c/Users/Win10/Documents/projet info/reseau de neuronnes/src/build/CMakeFiles/OpenGLTest.dir
+/mnt/c/Users/Win10/Documents/projet info/reseau de neuronnes/src/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Win10/Documents/projet info/reseau de neuronnes/src/build/CMakeFiles/rebuild_cache.dir
