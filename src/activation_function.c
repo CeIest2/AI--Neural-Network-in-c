@@ -9,6 +9,7 @@
 void sigmoide_function(matrix* vector_data, float lambda){
     // cette fonction modifie le vecteur entré en parramètre sans 
     // en créer un nouveau
+    // fonction sigmoide : 1/(1+exp(-x*lambda))
     for(int i=0;i<vector_data->rows;i++){
         vector_data->data[i][0]=1/(1+exp(-vector_data->data[i][0] * lambda));
     }
@@ -18,6 +19,7 @@ void sigmoide_function(matrix* vector_data, float lambda){
 void relu_function(matrix* vector_data){
     // cette fonction modifie le vecteur entré en parramètre sans 
     // en créer un nouveau
+    // fonction relu : max(0,x) 
     for(int i=0;i<vector_data->rows;i++){
         if(vector_data->data[i][0]<0){
             vector_data->data[i]=0;
@@ -29,6 +31,7 @@ void relu_function(matrix* vector_data){
 void softmax_function(matrix* vector_data){
     // cette fonction modifie le vecteur entré en parramètre sans 
     // en créer un nouveau
+    // fonction softmax : exp(x)/sum(exp(x))
     float sum=0;
     for(int i=0;i<vector_data->rows;i++){
         sum+=exp(vector_data->data[i][0]);
