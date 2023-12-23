@@ -10,6 +10,8 @@
 
 
 matrix* create_matrix(int rows, int cols){
+    // fonction entré : dimension de la matrice à créer
+    //          sorti : pointeur vers la matrice créée
     matrix* matrix_data      = malloc(sizeof(matrix));
     matrix_data->rows        = rows;
     matrix_data->cols        = cols;
@@ -21,6 +23,9 @@ matrix* create_matrix(int rows, int cols){
 }
 
 void destroy_matrix(matrix* matrix_data){
+    // entré : pointeur vers la matrice à détruire
+    // sortie : rien
+    // pour free une matrice
     if(matrix_data == NULL){
         return ;
     }
@@ -40,14 +45,12 @@ input* create_input(int size){
     input* input_object             = malloc(sizeof(input));
     input_object->size              = size;
     input_object->data_vector_input = create_matrix(size,1);
-    input_object->bias              = create_matrix(size,1);
     return input_object;
 }
 
 void destroy_input(input* input_data){
     if(input_data != NULL){
         destroy_matrix(input_data->data_vector_input);
-        destroy_matrix(input_data->bias);
         free(input_data);
     }
 }

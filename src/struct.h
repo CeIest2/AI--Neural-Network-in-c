@@ -42,7 +42,6 @@ void initialize_neural_network(neural_network* neural_network_object);
 struct input{
     int size;                   // taille de l'input
     matrix* data_vector_input;  // vecteur de l'input
-    matrix* bias;                 // biais de l'input
 };
 
 
