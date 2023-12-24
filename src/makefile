@@ -1,16 +1,16 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -fsanitize=address -fsanitize=address
-SRC = main.c struct.c activation_function.c display_struct.c weight_function.c
-OBJ = $(SRC:.c=.o)
-EXE = main
+# Makefile dans le dossier src
 
-all: $(EXE)
+# Définir les dossiers et leurs Makefiles respectifs
+SUBDIRS = activation_fonction affichage passe_en_avant structures traitement_data
 
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(EXE) -lm
+.PHONY: all clean $(SUBDIRS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+all: $(SUBDIRS)
+
+$(SUBDIRS):
+	$(MAKE) -C $@
 
 clean:
-	rm -f $(EXE) $(OBJ)
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir clean; \
+	done
