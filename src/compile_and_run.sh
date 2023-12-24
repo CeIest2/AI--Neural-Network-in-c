@@ -9,7 +9,7 @@ make
 if [ $? -eq 0 ]; then
     echo "Compilation réussie. Exécution de l'exécutable..."
     # Exécution de l'exécutable généré
-    ./output/nom_de_votre_executable
+    ./main  # Remplacez "main" par le nom de votre exécutable
 else
     echo "Erreur lors de la compilation de la partie principale (src)."
 fi
