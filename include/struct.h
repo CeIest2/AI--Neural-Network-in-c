@@ -64,7 +64,7 @@ struct matrix {
     // c'est une matrice, ça ce voit là
     int rows;                  // nombre de ligne de la matrice
     int cols;                  // nombre de colonne de la matrice
-    float** data;              // matrice de float
+    double** data;              // matrice de float
 };
 
 
