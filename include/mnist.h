@@ -10,10 +10,10 @@ https://github.com/takafumihoriuchi/MNIST_for_C
 #include <string.h>
 
 // set appropriate path for data
-#define TRAIN_IMAGE "../data/train-images.idx3-ubyte"
-#define TRAIN_LABEL "../data/train-labels.idx1-ubyte"
-#define TEST_IMAGE "../data/t10k-images.idx3-ubyte"
-#define TEST_LABEL "../data/t10k-labels.idx1-ubyte"
+#define TRAIN_IMAGE "../../data/train-images.idx3-ubyte"
+#define TRAIN_LABEL "../../data/train-labels.idx1-ubyte"
+#define TEST_IMAGE "../../data/t10k-images.idx3-ubyte"
+#define TEST_LABEL "../../data/t10k-labels.idx1-ubyte"
 
 #define SIZE 784 // 28*28
 #define NUM_TRAIN 60000
@@ -64,9 +64,12 @@ void read_mnist_char(char *file_path, int num_data, int len_info, int arr_n, uns
 {
     int i, fd;
     unsigned char *ptr;
+    printf("Opening file: %s\n", file_path); // Display the path of the file being opened
+    
 
     if ((fd = open(file_path, O_RDONLY)) == -1) {
-        fprintf(stderr, "couldn't open image file");
+        perror("error opening file\n");
+        fprintf(stderr, "couldn't open image file\n");
         exit(-1);
     }
     
@@ -107,16 +110,22 @@ void label_char2int(int num_data, unsigned char data_label_char[][1], int data_l
 
 void load_mnist()
 {
+    printf("1\n");
     read_mnist_char(TRAIN_IMAGE, NUM_TRAIN, LEN_INFO_IMAGE, SIZE, train_image_char, info_image);
+    printf("2\n");
     image_char2double(NUM_TRAIN, train_image_char, train_image);
-
+    printf("3\n");
     read_mnist_char(TEST_IMAGE, NUM_TEST, LEN_INFO_IMAGE, SIZE, test_image_char, info_image);
+    
+    printf("4\n");
     image_char2double(NUM_TEST, test_image_char, test_image);
-    
+    printf("5\n");
     read_mnist_char(TRAIN_LABEL, NUM_TRAIN, LEN_INFO_LABEL, 1, train_label_char, info_label);
+    printf("6\n");
     label_char2int(NUM_TRAIN, train_label_char, train_label);
-    
+    printf("7\n");
     read_mnist_char(TEST_LABEL, NUM_TEST, LEN_INFO_LABEL, 1, test_label_char, info_label);
+    printf("8\n");
     label_char2int(NUM_TEST, test_label_char, test_label);
 }
 
@@ -135,15 +144,15 @@ void print_mnist_pixel(double data_image[][SIZE], int num_data)
 }
 
 
-void print_mnist_label(int num_data)
+void print_mnist_label(int data_label[], int num_data)
 {
     int i;
     if (num_data == NUM_TRAIN)
         for (i=0; i<num_data; i++)
-            printf("train_label[%d]: %d\n", i, train_label[i]);
+            printf("train_label[%d]: %d\n", i, data_label[i]);
     else
         for (i=0; i<num_data; i++)
-            printf("test_label[%d]: %d\n", i, test_label[i]);
+            printf("test_label[%d]: %d\n", i, data_label[i]);
 }
 
 
