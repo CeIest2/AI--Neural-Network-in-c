@@ -21,7 +21,7 @@ int main(void)
 
     // show all pixels and labels in test dataset
     print_mnist_pixel(test_image, NUM_TEST);
-    print_mnist_label(test_label, NUM_TEST);
+    print_mnist_label(NUM_TEST);
 
     return 0;
 }

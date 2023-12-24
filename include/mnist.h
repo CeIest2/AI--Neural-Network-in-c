@@ -135,7 +135,7 @@ void print_mnist_pixel(double data_image[][SIZE], int num_data)
 }
 
 
-void print_mnist_label(int data_label[], int num_data)
+void print_mnist_label(int num_data)
 {
     int i;
     if (num_data == NUM_TRAIN)
@@ -168,11 +168,13 @@ void save_image(int n, char name[])
     fputs("# Created by Image Processing\n", fp);
     fprintf(fp, "%d %d\n", width[n], height[n]);
     fprintf(fp, "%d\n", MAX_BRIGHTNESS);
-    for (y=0; y<height[n]; y++)
-        for (x=0; x<width[n]; x++)
+    for (y=0; y<height[n]; y++){
+        for (x=0; x<width[n]; x++){
             fputc(image[n][x][y], fp);
-        fclose(fp);
-        printf("Image was saved successfully\n");
+        }
+    }
+    fclose(fp);
+    printf("Image was saved successfully\n");
 }
 
 
