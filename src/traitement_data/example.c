@@ -1,4 +1,5 @@
 #include "mnist.h"
+#include "creat_mini_batch.h"
 
 int main(void)
 {

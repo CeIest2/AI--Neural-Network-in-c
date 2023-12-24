@@ -1,0 +1,5 @@
+#ifndef CREAT_MINI_BATCH_H
+#define CREAT_MINI_BATCH_H
+
+
+#endif // CREAT_MINI_BATCH_H
