@@ -2,6 +2,8 @@
 #define __STRUCT_H__
 
 typedef struct input input;
+typedef struct mini_batch mini_batch;
+typedef struct vector_label label_vector;
 typedef struct input_layer input_layer;
 typedef struct hidden_layer hidden_layer;
 typedef struct output_layer output_layer;
@@ -41,7 +43,20 @@ void initialize_neural_network(neural_network* neural_network_object);
 
 struct input{
     int size;                   // taille de l'input
+    char* label;                // label de l'input
     matrix* data_vector_input;  // vecteur de l'input
+};
+
+struct mini_batch{
+    int size_input;             // taille de l'input
+    int size_batch;             // taille du batch
+    matrix* data_matrix_input;  // matrice du batch, chaque ligne est un input
+    char** label;               // label de l'input
+};
+
+struct label_vector {
+    int size;             // taille du vecteur de labels
+    char** labels;        // tableau de chaînes de caractères représentant les labels
 };
 
 
