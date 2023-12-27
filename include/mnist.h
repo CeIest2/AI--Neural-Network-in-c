@@ -26,24 +26,24 @@ https://github.com/takafumihoriuchi/MNIST_for_C
 #define MAX_FILENAME 256
 #define MAX_NUM_OF_IMAGES 1
 
-extern unsigned char image[MAX_NUM_OF_IMAGES][MAX_IMAGESIZE][MAX_IMAGESIZE];
-extern int width[MAX_NUM_OF_IMAGES], height[MAX_NUM_OF_IMAGES];
+unsigned char image[MAX_NUM_OF_IMAGES][MAX_IMAGESIZE][MAX_IMAGESIZE];
+int width[MAX_NUM_OF_IMAGES], height[MAX_NUM_OF_IMAGES];
 
-extern int info_image[LEN_INFO_IMAGE];
-extern int info_label[LEN_INFO_LABEL];
+int info_image[LEN_INFO_IMAGE];
+int info_label[LEN_INFO_LABEL];
 
-extern unsigned char train_image_char[NUM_TRAIN][SIZE];
-extern unsigned char test_image_char[NUM_TEST][SIZE];
-extern unsigned char train_label_char[NUM_TRAIN][1];
-extern unsigned char test_label_char[NUM_TEST][1];
+unsigned char train_image_char[NUM_TRAIN][SIZE];
+unsigned char test_image_char[NUM_TEST][SIZE];
+unsigned char train_label_char[NUM_TRAIN][1];
+unsigned char test_label_char[NUM_TEST][1];
 
-extern double train_image[NUM_TRAIN][SIZE];
-extern double test_image[NUM_TEST][SIZE];
-extern int  train_label[NUM_TRAIN];
-extern int test_label[NUM_TEST];
+double train_image[NUM_TRAIN][SIZE];
+double test_image[NUM_TEST][SIZE];
+int  train_label[NUM_TRAIN];
+int test_label[NUM_TEST];
 
 
-static inline void FlipLong(unsigned char * ptr)
+void FlipLong(unsigned char * ptr)
 {
     register unsigned char val;
     
@@ -110,6 +110,7 @@ void label_char2int(int num_data, unsigned char data_label_char[][1], int data_l
 
 void load_mnist()
 {
+
     printf("1\n");
     read_mnist_char(TRAIN_IMAGE, NUM_TRAIN, LEN_INFO_IMAGE, SIZE, train_image_char, info_image);
     printf("2\n");

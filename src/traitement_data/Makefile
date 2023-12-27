@@ -1,29 +1,26 @@
-# Makefile dans le dossier activation_fonction
+# Makefile dans le dossier traitement_data
 
 # Listez les fichiers sources
 SOURCES = creat_mini_batch.c
-DEPS = ../../include/creat_mini_batch.h
 
 # Définissez le nom de la bibliothèque partagée
 TARGET = libcreat_mini_batch.so
-EXECUTABLE = creat_mini_batch
 
 # Options de compilation
 CC = gcc
-CFLAGS = -g -Wall -Wextra -fsanitize=address -shared -fPIC
+CFLAGS = -Wall -Wextra -fsanitize=address -shared -fPIC
 LDFLAGS = -lm
 
+# Chemin vers la bibliothèque partagée de structures
+STRUCTURES_LIB = ../structures/libstructures.so
+
 # Règle pour tout compiler
-all: $(TARGET) $(EXECUTABLE)
+all: $(TARGET)
 
 # Compilation des fichiers sources en bibliothèque partagée
-$(TARGET): $(SOURCES) $(DEPS)
-	$(CC) $(CFLAGS) $< -o $@ -I../../include $(LDFLAGS)
-
-# Compilation du fichier exécutable
-$(EXECUTABLE): $(SOURCES) $(DEPS)
-	$(CC) $(CFLAGS) $^ -o $@ -I../../include $(LDFLAGS)
+$(TARGET): $(SOURCES) $(STRUCTURES_LIB)
+	$(CC) $(CFLAGS) $^ -o $@ -I../../include -L../structures -lstructures $(LDFLAGS)
 
 # Règle pour nettoyer les fichiers générés
 clean:
-	rm -f $(TARGET) $(EXECUTABLE)
+	rm -f $(TARGET)
