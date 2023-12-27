@@ -1,18 +1,29 @@
-# Makefile dans le dossier traitement_data
+# Makefile dans le dossier activation_fonction
 
+# Listez les fichiers sources
+SOURCES = creat_mini_batch.c
+DEPS = ../../include/creat_mini_batch.h
+
+# Définissez le nom de la bibliothèque partagée
+TARGET = libcreat_mini_batch.so
+EXECUTABLE = creat_mini_batch
+
+# Options de compilation
 CC = gcc
-CFLAGS = -Wall -Wextra -fsanitize=address -fsanitize=address
-SRC = example.c
-OBJ = $(SRC:.c=.o)
-EXE = example
+CFLAGS = -g -Wall -Wextra -fsanitize=address -shared -fPIC
+LDFLAGS = -lm
 
-# Ajoutez ici la règle pour construire le fichier objet .o
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I../../include
+# Règle pour tout compiler
+all: $(TARGET) $(EXECUTABLE)
 
-# Ajoutez ici la règle pour construire l'exécutable
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(EXE) -lm
+# Compilation des fichiers sources en bibliothèque partagée
+$(TARGET): $(SOURCES) $(DEPS)
+	$(CC) $(CFLAGS) $< -o $@ -I../../include $(LDFLAGS)
 
+# Compilation du fichier exécutable
+$(EXECUTABLE): $(SOURCES) $(DEPS)
+	$(CC) $(CFLAGS) $^ -o $@ -I../../include $(LDFLAGS)
+
+# Règle pour nettoyer les fichiers générés
 clean:
-	rm -f $(EXE) $(OBJ)
+	rm -f $(TARGET) $(EXECUTABLE)

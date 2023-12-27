@@ -2,14 +2,22 @@
 #define __STRUCT_H__
 
 typedef struct input input;
+
 typedef struct mini_batch mini_batch;
-typedef struct vector_label label_vector;
+typedef struct batch batch;
+typedef struct list_mini_batch list_mini_batch;
+
+typedef struct label_vector label_vector;
+
 typedef struct input_layer input_layer;
 typedef struct hidden_layer hidden_layer;
 typedef struct output_layer output_layer;
+
 typedef struct matrix matrix;
+
 typedef struct list_hidden_layer_head list_hidden_layer_head;
 typedef struct list_hidden_layer_queue list_hidden_layer_queue;
+
 typedef struct neural_network neural_network;
 
 
@@ -42,23 +50,37 @@ void add_hidden_layer_NN(neural_network* neural_network_object,int number_of_lay
 void initialize_neural_network(neural_network* neural_network_object);
 
 struct input{
+    // input va pouvoir servir lorsque l'on utilise le modele  pour de l'inférence
     int size;                   // taille de l'input
     char* label;                // label de l'input
     matrix* data_vector_input;  // vecteur de l'input
 };
 
 struct mini_batch{
+    // mini_batch est une matrice contenant plusieurs input pour passer un groupe entier
+    // d'input dans le réseau de neurones lors de l'entrainement
     int size_input;             // taille de l'input
     int size_batch;             // taille du batch
     matrix* data_matrix_input;  // matrice du batch, chaque ligne est un input
-    char** label;               // label de l'input
+    label_vector* data_vector_label; // vector label de l'input
+};
+
+struct list_mini_batch{
+    // nième mini_batch de la liste chaînée
+    mini_batch* mini_batch_object;      // mini_batch, élément de la queue de la liste chaînée de mini_batch
+    list_mini_batch* next;              // prochain élément de la chaine
 };
 
 struct label_vector {
     int size;             // taille du vecteur de labels
-    char** labels;        // tableau de chaînes de caractères représentant les labels
+    int* labels;         // liste des label réprésenter avec des int
 };
 
+struct batch{
+    // les mini-batch vont être stocké  en  une liste chaînée de mini_batch s
+    list_mini_batch* head_of_list;         // tête de la liste chaîné de mini_batch
+    int nb_mini_batch;                     // Nombre de mini_batch dans cette liste
+};
 
 struct matrix {
     // c'est une matrice, ça ce voit là

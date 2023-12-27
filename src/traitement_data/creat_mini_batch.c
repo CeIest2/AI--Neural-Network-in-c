@@ -1,70 +1,141 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "struct.h"
+#include "mnist.h"
 
-// Fonction pour créer un mini-batch à partir d'un tableau de données
-matrix* createMiniBatch(double** data, int dataSize, int batchSize) {
-    matrix* miniBatch = create_matrix(batchSize, dataSize);
-    double train_image[NUM_TRAIN][SIZE];
-    if (miniBatch == NULL) {
-        printf("Erreur lors de l'allocation de mémoire pour le mini-batch.\n");
-        return NULL;
-    }
 
-    for (int i = 0; i < batchSize; i++) {
-        miniBatch[i] = (int*)malloc(dataSize * sizeof(int));
-        if (miniBatch[i] == NULL) {
-            printf("Erreur lors de l'allocation de mémoire pour le mini-batch.\n");
-            return NULL;
-        }
-        for (int j = 0; j < dataSize; j++) {
-            miniBatch[i][j] = data[i][j];
-        }
-    }
 
-    return miniBatch;
+label_vector* creat_label_vector(int size_label_vector){
+    label_vector* new_label_vector = (label_vector*)malloc(sizeof(label_vector));
+    new_label_vector->size = size_label_vector;
+    new_label_vector->labels = (int*)malloc(sizeof(int)*size_label_vector);
+
+    return new_label_vector;
 }
 
-// Fonction pour libérer la mémoire allouée pour un mini-batch
-void freeMiniBatch(int** miniBatch, int batchSize) {
-    for (int i = 0; i < batchSize; i++) {
-        free(miniBatch[i]);
+list_mini_batch* create_mini_batch(double** data_set, int* data_label, int size_mini_batch, int start_index){
+    list_mini_batch* new_list_mini_batch = (list_mini_batch*)malloc(sizeof(list_mini_batch));
+    new_list_mini_batch->mini_batch_object = (mini_batch*)malloc(sizeof(mini_batch));
+    new_list_mini_batch->mini_batch_object->size_input = SIZE;
+    new_list_mini_batch->mini_batch_object->size_batch = size_mini_batch;
+    new_list_mini_batch->next = NULL;
+    new_list_mini_batch->mini_batch_object->data_matrix_input = create_matrix(size_mini_batch, SIZE);
+    new_list_mini_batch->mini_batch_object->data_vector_label = creat_label_vector(size_mini_batch);
+
+    // on va maintenant remplir la matrice avec les données
+    int i, j;
+    for(i = 0; i < size_mini_batch; i++){
+        new_list_mini_batch->mini_batch_object->data_vector_label->labels[i] = data_label[start_index + i];
+        for(j = 0; j < SIZE; j++){
+            new_list_mini_batch->mini_batch_object->data_matrix_input->data[i][j] = data_set[start_index + i][j];
+        }
     }
-    free(miniBatch);
+
+    return new_list_mini_batch;
 }
 
-int main() {
-    // Exemple d'utilisation des fonctions createMiniBatch et freeMiniBatch
-    double train_image[NUM_TRAIN][SIZE];
+batch* create_list_mini_batch(int nb_mini_batch, double** data_set, int* data_label){
+    // on calcul le nombre d'input dans chaque mini batch
+    int size_mini_batch = NUM_TRAIN / nb_mini_batch;
 
-    // Création d'un tableau de données
-    for (int i = 0; i < dataSize; i++) {
-        data[i] = (int*)malloc(dataSize * sizeof(int));
-        for (int j = 0; j < dataSize; j++) {
-            data[i][j] = i + j;
+    // on calcul le nombre d'input dans le dernier mini batch du data set
+    int size_last_mini_batch = NUM_TRAIN % nb_mini_batch;
+
+    // on crée la tête de la liste
+    batch* new_batch = (batch*)malloc(sizeof(batch));
+    int i;
+    list_mini_batch* current_mini_batch = NULL;
+    for(i = 0; i < nb_mini_batch; i++){
+        if(current_mini_batch == NULL){
+            new_batch->head_of_list = create_mini_batch(data_set, data_label, size_mini_batch, 0);
+            current_mini_batch = new_batch->head_of_list;
+        }
+        else if(i == nb_mini_batch - 1){
+            current_mini_batch->next = create_mini_batch(data_set, data_label, size_last_mini_batch, i * size_mini_batch);
+            current_mini_batch = current_mini_batch->next;
+        }
+        else{
+            current_mini_batch->next = create_mini_batch(data_set, data_label, size_mini_batch, i * size_mini_batch);
+            current_mini_batch = current_mini_batch->next;
         }
     }
+    return new_batch;
+}
 
-    // Création d'un mini-batch à partir du tableau de données
-    int** miniBatch = createMiniBatch(data, dataSize, batchSize);
 
-    // Affichage du mini-batch
-    printf("Mini-batch :\n");
-    for (int i = 0; i < batchSize; i++) {
-        for (int j = 0; j < dataSize; j++) {
-            printf("%d ", miniBatch[i][j]);
+
+void free_label_vector(label_vector* lv) {
+    if (lv != NULL) {
+        free(lv->labels);
+        free(lv);
+    }
+}
+
+void free_matrix(matrix* mat) {
+    if (mat != NULL) {
+        int i;
+        for (i = 0; i < mat->rows; i++) {
+            free(mat->data[i]);
         }
-        printf("\n");
+        free(mat->data);
+        free(mat);
     }
+}
 
-    // Libération de la mémoire allouée pour le mini-batch
-    freeMiniBatch(miniBatch, batchSize);
-
-    // Libération de la mémoire allouée pour le tableau de données
-    for (int i = 0; i < dataSize; i++) {
-        free(data[i]);
+void free_mini_batch(mini_batch* mb) {
+    if (mb != NULL) {
+        free_matrix(mb->data_matrix_input);
+        free_label_vector(mb->data_vector_label);
+        free(mb);
     }
-    free(data);
+}
 
+void free_list_mini_batch(list_mini_batch* lmb) {
+    if (lmb != NULL) {
+        list_mini_batch* current = lmb;
+        while (current != NULL) {
+            list_mini_batch* next = current->next;
+            free_mini_batch(current->mini_batch_object);
+            free(current);
+            current = next;
+        }
+    }
+}
+
+void free_batch(batch* b) {
+    if (b != NULL) {
+        free_list_mini_batch(b->head_of_list);
+        free(b);
+    }
+}
+    
+int main(void)
+{
+    printf("Hello, world!\n");
+    // call to store mnist in array
+    load_mnist();
+
+    printf("Hello, world!\n");
+    // print pixels of first data in test dataset
+    
+    int i;
+    for (i=0; i<784; i++) {
+        printf("%1.1f ", test_image[0][i]);
+        if ((i+1) % 28 == 0) putchar('\n');
+    }
+    // print first label in test dataset
+    printf("label: %d\n", test_label[0]);
+    
+    // save image of first data in test dataset as .pgm file
+    // save_mnist_pgm(test_image, 0);
+
+    // on va maintenant mettre 
+    /*
+    // show all pixels and labels in test dataset
+    print_mnist_pixel(test_image, NUM_TEST);
+    print_mnist_label(NUM_TEST, data_label);
+
+    */
     return 0;
 }
